@@ -33,10 +33,13 @@
 	<tr class="t3-row-header">
 		<td>&nbsp;</td>
 		<td>###LABEL_ATTENDEE_FULL_NAME###</td>
-		<td>###LABEL_EVENT_ACCREDITATION_NUMBER###</td>
+		<td></td>
 		<td>###LABEL_EVENT_TITLE###</td>
 		<td>###LABEL_EVENT_DATE###</td>
-		<td>&nbsp;</td>
+<!-- gtn start -->
+		<td class="editdeleteicons_participants_head">&nbsp;</td>
+<!-- gtn end -->
+		<td class="editdeleteicons_participants_head">&nbsp;</td>
 	</tr>
 <!-- ###REGISTRATION_TABLE_HEADING### -->
 
@@ -57,7 +60,17 @@
 		<td>
 			###EVENT_DATE###
 		</td>
-		<td>
+		<td class="invoice_button_participants">
+<!-- gtn start -->
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
+						<form action="/index.php?eID=seminars_invoice" method="post" target="_blank"><button class="create_pdf_participants">Rechnung</button>
+						<input type="hidden" name="eventUid" value="###EVENT_UID###" />
+						<input type="hidden" name="userUid" value="###ATTENDEE_UID###" />
+						<input type="hidden" name="action" value="invoiceEvent" /></form>
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
+<!-- gtn end -->
+		</td>
+		<td class="editdeleteicons_participants">
 			###EDIT_BUTTON###
 			###DELETE_BUTTON###
 		</td>

@@ -267,6 +267,7 @@ CREATE TABLE tx_seminars_seminars (
 	attendees_max int(11) unsigned DEFAULT '0' NOT NULL,
 	queue_size int(1) unsigned DEFAULT '0' NOT NULL,
 	offline_attendees int(11) unsigned DEFAULT '0' NOT NULL,
+	hide_registration_fieldset1 int(1) unsigned DEFAULT '0' NOT NULL,
 	target_groups int(11) unsigned DEFAULT '0' NOT NULL,
 	skip_collision_check tinyint(1) unsigned DEFAULT '0' NOT NULL,
 	cancelled tinyint(1) unsigned DEFAULT '0' NOT NULL,
@@ -280,6 +281,7 @@ CREATE TABLE tx_seminars_seminars (
 	requirements int(11) unsigned DEFAULT '0' NOT NULL,
 	dependencies int(11) unsigned DEFAULT '0' NOT NULL,
 	publication_hash text,
+	accessories int(11) unsigned DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
@@ -404,7 +406,7 @@ CREATE TABLE tx_seminars_attendances (
 	foods int(11) unsigned DEFAULT '0' NOT NULL,
 	known_from text,
 	notes text,
-	kids int(11) unsigned DEFAULT '0' NOT NULL,
+	kids int(20) unsigned DEFAULT '0' NOT NULL,
 	checkboxes int(11) unsigned DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
@@ -624,6 +626,25 @@ CREATE TABLE tx_seminars_foods (
 
 
 #
+# Table structure for table 'tx_seminars_accessories'
+#
+CREATE TABLE tx_seminars_accessories (
+	uid int(11) unsigned DEFAULT '0' NOT NULL auto_increment,
+	pid int(11) unsigned DEFAULT '0' NOT NULL,
+	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
+	crdate int(11) unsigned DEFAULT '0' NOT NULL,
+	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
+	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
+	is_dummy_record tinyint(1) unsigned DEFAULT '0' NOT NULL,
+	title tinytext,
+
+	PRIMARY KEY (uid),
+	KEY parent (pid),
+	KEY dummy (is_dummy_record)
+);
+
+
+#
 # Table structure for table 'tx_seminars_seminars_foods_mm'
 #
 CREATE TABLE tx_seminars_seminars_foods_mm (
@@ -636,6 +657,21 @@ CREATE TABLE tx_seminars_seminars_foods_mm (
 	KEY uid_foreign (uid_foreign),
 	KEY dummy (is_dummy_record)
 );
+
+#
+# Table structure for table 'tx_seminars_seminars_accessories_mm'
+#
+CREATE TABLE tx_seminars_seminars_accessories_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	is_dummy_record tinyint(1) unsigned DEFAULT '0' NOT NULL,
+	tablenames varchar(30) DEFAULT '' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign),
+	KEY dummy (is_dummy_record)
+);
+
 
 
 #

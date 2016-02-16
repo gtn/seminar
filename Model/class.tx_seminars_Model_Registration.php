@@ -637,6 +637,16 @@ class tx_seminars_Model_Registration extends tx_oelib_Model {
 	}
 
 	/**
+	 * Returns the accessory of this registration.
+	 *
+	 * @return string the accessory of this registration, will be empty
+	 */
+	public function getAccessory() {
+		return $this->getAsString('accessory');
+	}
+
+
+	/**
 	 * Sets the food of this registration.
 	 *
 	 * @param string $food the food of this registration to set, may be empty
@@ -646,6 +656,16 @@ class tx_seminars_Model_Registration extends tx_oelib_Model {
 	}
 
 	/**
+	 * Sets the accessory of this registration.
+	 *
+	 * @param string $food the food of this registration to set, may be empty
+	 */
+	public function setAccessory($accessory) {
+		$this->setAsString('accessory', $accessory);
+	}
+
+
+	/**
 	 * Returns the foods of this registration.
 	 *
 	 * @return tx_oelib_List the foods of this registration
@@ -653,6 +673,16 @@ class tx_seminars_Model_Registration extends tx_oelib_Model {
 	public function getFoods() {
 		return $this->getAsList('foods');
 	}
+
+	/**
+	 * Returns the accessories of this registration.
+	 *
+	 * @return tx_oelib_List the accessories of this registration
+	 */
+	public function getFoods() {
+		return $this->getAsList('accessories');
+	}
+
 
 	/**
 	 * Returns where the attendee has heard of the event of this registration.

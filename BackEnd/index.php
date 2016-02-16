@@ -157,6 +157,10 @@ class tx_seminars_module2 extends tx_seminars_BackEnd_Module {
 			if ($BE_USER->check('tables_select', SEMINARS_TABLE_ORGANIZERS)) {
 				$this->availableSubModules[4] = $LANG->getLL('subModuleTitle_organizers');
 			}
+/* gtn start */
+			$this->availableSubModules[5] = 'Addresses';
+			$this->availableSubModules[6] = 'Food Amounts';
+/* gtn end */
 
 			// Read the selected sub module (from the tab menu) and make it available within this class.
 			$this->subModule = intval(t3lib_div::_GET('subModule'));
@@ -169,6 +173,8 @@ class tx_seminars_module2 extends tx_seminars_BackEnd_Module {
 				$this->subModule = key($this->availableSubModules);
 			}
 
+			// dont need this tab in menu.
+			unset($this->availableSubModules[6]);
 			// Only generate the tab menu if the current back-end user has the
 			// rights to show any of the tabs.
 			if ($this->subModule) {
@@ -178,6 +184,8 @@ class tx_seminars_module2 extends tx_seminars_BackEnd_Module {
 					$this->availableSubModules);
 				$this->content .= $this->doc->spacer(5);
 			}
+			// create submoduleitem again
+			$this->availableSubModules[6] = 'Food Amounts';
 
 			// Select which sub module to display.
 			// If no sub module is specified, an empty page will be displayed.
@@ -200,6 +208,20 @@ class tx_seminars_module2 extends tx_seminars_BackEnd_Module {
 					);
 					$this->content .= $organizersList->show();
 					break;
+/* gtn start */
+				case 5:
+					$addressesList = tx_oelib_ObjectFactory::make(
+						'tx_seminars_BackEnd_AddressesList', $this
+					);
+					$this->content .= $addressesList->show();
+					break;
+				case 6: // Editing food amounts
+					$foodAmounts = tx_oelib_ObjectFactory::make(
+						'tx_seminars_BackEnd_FoodAmount', $this
+					);
+					$this->content .= $foodAmounts->show();
+					break;
+/* gtn end */
 				case 1:
 					if ($this->isConfirmEventFormRequested()) {
 						$this->content .= $this->getConfirmEventMailForm();

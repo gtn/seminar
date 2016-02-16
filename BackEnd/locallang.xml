@@ -12,7 +12,7 @@
 			<label index="title">Events</label>
 			<label index="subModuleTitle_registrations">Registrations</label>
 			<label index="subModuleTitle_events">Events</label>
-			<label index="subModuleTitle_speakers">Speakers</label>
+			<label index="subModuleTitle_speakers">Hosting team</label>
 			<label index="subModuleTitle_organizers">Organizers</label>
 			<label index="eventlist.accreditation_number">Number</label>
 			<label index="eventlist.date">Date</label>
@@ -94,7 +94,7 @@
 			<label index="title">Veranstaltungen</label>
 			<label index="subModuleTitle_registrations">Anmeldungen</label>
 			<label index="subModuleTitle_events">Veranstaltungen</label>
-			<label index="subModuleTitle_speakers">ReferentInnen</label>
+			<label index="subModuleTitle_speakers">Gastegeberteam</label>
 			<label index="subModuleTitle_organizers">Veranstalter</label>
 			<label index="eventlist.accreditation_number">Nummer</label>
 			<label index="eventlist.date">Datum</label>
@@ -115,7 +115,7 @@
 			<label index="organizerlist.title">Name</label>
 			<label index="registrationlist.feuser.name">Name</label>
 			<label index="registrationlist.deleted">(gelöscht)</label>
-			<label index="registrationlist.seminar.accreditation_number">Akkreditierungsnummer</label>
+			<label index="registrationlist.seminar.accreditation_number">Rechnungsnummer</label>
 			<label index="registrationlist.seminar.title">Veranstaltung</label>
 			<label index="registrationlist.seminar.date">Veranstaltungsdatum</label>
 			<label index="registrationlist.label_regularRegistrations">Reguläre Anmeldungen</label>

@@ -542,6 +542,14 @@ class tx_seminars_pi1_registrationEditor extends tx_seminars_pi1_frontEndEditor 
 			case 'terms_2':
 				$result = $result && $this->isTerms2Enabled();
 				break;
+// gtn
+			case 'background_knowledge':
+				$result = $result && $this->getSeminar()->isBackgroundKnowledgeShow();
+				break;
+			case 'notes':
+				$result = $result && $this->getSeminar()->isNotesShow();
+				break;
+// gtn
 			default:
 				break;
 		}
@@ -1686,6 +1694,37 @@ class tx_seminars_pi1_registrationEditor extends tx_seminars_pi1_frontEndEditor 
 		}
 
 		return $result;
+	}
+	
+	public function subscribeToNewsletters() {
+		$frontEndUser = $GLOBALS['TSFE']->fe_user->user;
+		
+		if (is_array($this->conf['newsletter_relations.'])) {
+			foreach ($this->conf['newsletter_relations.'] as $eventpid => $newspid)
+				$news_pids[$eventpid] = $newspid;		
+		};
+		
+		$getvars = t3lib_div::_GP('tx_seminars_pi1');
+		$eventid = $getvars['seminar'];
+		$event = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow ('*', 'tx_seminars_seminars', 'uid='.$eventid);
+		$eventpid = $event['pid'];
+		
+		$pid = $news_pids[$eventpid]; // page with tt_address for Salon
+	
+		$where_clause = " pid='".$pid."' AND email = '".$frontEndUser['username']."' AND hidden=0 AND deleted=0 ";
+		$exists_ttaddress = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow ('*', 'tt_address', $where_clause);
+		
+		if (!$exists_ttaddress) {
+			$fields = array (
+				'pid' => $pid,
+				'tstamp' => time(),
+				'name' => $frontEndUser['name'],
+				'email' => $frontEndUser['username'],
+				'module_sys_dmail_html' => 1
+			);
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery ('tt_address', $fields);
+			echo 'insert';
+		}
 	}
 
 	/**

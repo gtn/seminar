@@ -129,7 +129,7 @@ class tx_seminars_BackEnd_RegistrationsList extends tx_seminars_BackEnd_List {
 
 		$content .= $this->template->getSubpart('SEMINARS_REGISTRATION_LIST');
 		$content .= $this->configCheckWarnings;
-
+		$content .= '<br><a href="JavaScript:print();"><img src="../../../../fileadmin/salonhosting/Resources/Public/Images/b_print.png"> Print</a>';
 		return $content;
 	}
 
@@ -163,20 +163,28 @@ class tx_seminars_BackEnd_RegistrationsList extends tx_seminars_BackEnd_List {
 				$tableLabel = 'registrationlist.label_regularRegistrations';
 				break;
 		}
+//$this->eventUid = 3;
 		if ($this->eventUid > 0) {
 			$builder->limitToEvent($this->eventUid);
 		} else {
 			$builder->setSourcePages($pageData['uid'], self::RECURSION_DEPTH);
 		}
+		
+/* gtn start */		
+		$builder->setOrderByEventTitleAndUserName();
+/* gtn end */		
 
 		$registrationBag = $builder->build();
 		$result = !$registrationBag->isEmpty();
 
 		$tableRows = '';
-
+		
 		foreach ($registrationBag as $registration) {
 			try {
-				$userName = htmlspecialchars($registration->getUserName());
+				//$userName = htmlspecialchars($registration->getUserName());
+/* gtn start */				
+				$userName = $registration->getUserData('last_name').' '.$registration->getUserData('first_name');
+/* gtn end */				
 			} catch (tx_oelib_Exception_NotFound $e) {
 				$userName = $GLOBALS['LANG']->getLL('registrationlist.deleted');
 			}
@@ -192,7 +200,10 @@ class tx_seminars_BackEnd_RegistrationsList extends tx_seminars_BackEnd_List {
 				$eventDate = '';
 				$accreditationNumber = '';
 			}
-
+/* gtn start */
+			$this->template->setMarker('event_uid', $event->getUid());
+			$this->template->setMarker('attendee_uid', $registration->getUid());
+/* gtn end */
 			$this->template->setMarker('icon', $registration->getRecordIcon());
 			$this->template->setMarker('attendee_full_name', $userName);
 			$this->template->setMarker('event_accreditation_number', $accreditationNumber);

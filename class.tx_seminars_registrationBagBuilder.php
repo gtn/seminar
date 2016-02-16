@@ -165,6 +165,19 @@ class tx_seminars_registrationBagBuilder extends tx_seminars_bagbuilder {
 			'.seminar=' . SEMINARS_TABLE_SEMINARS . '.uid';
 		$this->setOrderBy($orderBy);
 	}
+	
+	/* gtn start
+	Sorting by event title, last name, first name */
+	public function setOrderByEventTitleAndUserName() {
+		// order by event_title
+		$this->setOrderByEventColumn(SEMINARS_TABLE_SEMINARS.'.title');
+		// order by name
+		$this->addAdditionalTableName('fe_users');
+		$this->whereClauseParts['fe_users'] = SEMINARS_TABLE_ATTENDANCES.'.user=fe_users.uid';
+		$this->setOrderBy(SEMINARS_TABLE_SEMINARS.'.title, fe_users.last_name, fe_users.first_name');	
+	}
+	/* gtn end */
+
 
 	/**
 	 * Limits the bag to registrations to which a non-deleted FE user record

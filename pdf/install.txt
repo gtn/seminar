@@ -1,0 +1,73 @@
+
+Install pdf invoices for seminar
+#----------------------------------------------------------------------------------------------------------
+1. Copy folder "pdf" to EXT:seminars/
+
+#----------------------------------------------------------------------------------------------------------
+2. Insert typoscript to page of particifants list
+this will insert link to invoice before list of particifants
+--------------
+temp.page < page.10.variables.content_0
+
+[loginUser = *] && [globalVar = _GET|tx_seminars_pi1|seminar > 0]
+page.10.variables.content_0 = COA_INT
+page.10.variables.content_0.10 = TEXT
+page.10.variables.content_0.10 {
+  value = Invoices
+  stdWrap.typolink.parameter.data = page:uid
+  stdWrap.typolink.target = _blank
+  stdWrap.typolink.additionalParams.cObject = COA
+  stdWrap.typolink.additionalParams.cObject {
+    10 = TEXT
+    10.value = &eID=seminars_invoice
+    20 = TEXT
+    20.insertData = 1
+    20.data = GP:tx_seminars_pi1|seminar
+    20.wrap = &seminar=|
+    20.required = 1
+  }
+}
+[end]
+
+page.10.variables.content_0.20 < temp.page
+
+----------------
+#----------------------------------------------------------------------------------------------------------
+3. Insert this code to template file "typo3conf/ext/seminars/Resources/Private/Templates/BackEnd/EventsList.html"
+this will add button 'Invoice' to backend module
+----------------
+				<td class="invoice_button">
+					<!-- ###INVOICE_BUTTON### -->
+						<form action="/index.php?eID=seminars_invoice_manager" method="post" target="_blank"><p><button class="create_pdf"><p>Invoice</p></button><input type="hidden" name="eventUid" value="###UID###" /><input type="hidden" name="action" value="invoiceEvent" /></p></form>
+					<!-- ###INVOICE_BUTTON### -->
+				</td>
+				<td class="invoice_button_participants">
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
+						<form action="/index.php?eID=seminars_invoice" method="post" target="_blank"><p><button class="create_pdf_participants"><p>Inv's for participants</p></button><input type="hidden" name="eventUid" value="###UID###" /><input type="hidden" name="action" value="invoiceEvent" /></p></form>
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
+				</td>
+----------------
+before  'cancel' button (see below)
+----------------
+				<td class="cancel_button">
+					<!-- ###CANCEL_BUTTON### -->
+						<form action="###CANCEL_BUTTON_URL###" method="post"><p><button><p>###LABEL_CANCEL_BUTTON###</p></button><input type="hidden" name="eventUid" value="###UID###" /><input type="hidden" name="action" value="cancelEvent" /></p></form>
+					<!-- ###CANCEL_BUTTON### -->
+				</td>
+----------------
+
+Also insert new 				
+<td>&nbsp;</td>
+into end of <head></head> the same table
+
+#----------------------------------------------------------------------------------------------------------
+4. Insert following code to the end of "/typo3conf/ext/seminars/ext_localconf.php"
+
+if(TYPO3_MODE == 'FE'){
+    $TYPO3_CONF_VARS['FE']['eID_include']['seminars_invoice'] = 'EXT:seminars/pdf/invoices.php';
+}  
+if(TYPO3_MODE == 'FE'){
+    $TYPO3_CONF_VARS['FE']['eID_include']['seminars_invoice_manager'] = 'EXT:seminars/pdf/invoice_manager.php';
+}  
+
+Thats all

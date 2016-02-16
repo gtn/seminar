@@ -1680,7 +1680,7 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 			// all the filtering applied).
 			$seminarOrRegistrationBag = $this->initListView($whatToDisplay);
 
-			if ($this->internal['res_count']) {
+			if ($this->internal['res_count']) { 
 				$result .= $this->createListTable($seminarOrRegistrationBag, $whatToDisplay);
 			} else {
 				$this->setMarker(
@@ -1791,15 +1791,14 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 			case 'my_events':
 				$builder->limitToAttendee($this->getFeUserUid());
 				break;
-			case 'my_vip_events':
+			case 'my_vip_events':   
 				$groupForDefaultVips = $this->getConfValueInteger(
 					'defaultEventVipsFeGroupID','s_template_special'
 				);
 				$isDefaultVip = ($groupForDefaultVips != 0)
 					&& tx_oelib_FrontEndLoginManager::getInstance()->
 						getLoggedInUser()->hasGroupMembership($groupForDefaultVips);
-
-				if (!$isDefaultVip) {
+				if (!$isDefaultVip) { 
 					// The current user is not listed as a default VIP for all
 					// events. Change the query to show only events where the
 					// current user is manually added as a VIP.
@@ -1807,7 +1806,11 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 				}
 				break;
 			case 'my_entered_events':
-				$builder->limitToOwner($this->getFeUserUid());
+				$globalmoderators = $this->getConfValueString('globalModeratorsUID','s_template_special');
+				$globalmoderators_arr = explode(',', $globalmoderators);
+				if (!in_array($this->getFeUserUid(), $globalmoderators_arr)) {
+					$builder->limitToOwner($this->getFeUserUid());
+				}
 				$builder->showHiddenRecords();
 				break;
 			case 'events_next_day':
@@ -1841,6 +1844,8 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 		$builder->setLimit(($pointer * $resultsAtATime) . ',' . $resultsAtATime);
 
 		$seminarOrRegistrationBag = $builder->build();
+		
+//		print_r($seminarOrRegistrationBag);
 
 		$this->internal['res_count'] = $seminarOrRegistrationBag->countWithoutLimit();
 
@@ -2037,10 +2042,17 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 				$listOfCategories
 			);
 
-			$this->setMarker(
-				'title_link',
-				$this->seminar->getLinkedFieldValue($this, 'title')
-			);
+			// get English title
+			if (t3lib_div::_GP('L')==1)		
+				$this->setMarker(
+					'title_link',
+					$this->seminar->getLinkedFieldValue($this, 'title_en')
+				);
+			else
+				$this->setMarker(
+					'title_link',
+					$this->seminar->getLinkedFieldValue($this, 'title')
+				);
 			$this->setMarker('subtitle', htmlspecialchars($this->seminar->getSubtitle()));
 			$this->setMarker('uid', $this->seminar->getUid($this));
 			$this->setMarker('event_type', htmlspecialchars($this->seminar->getEventType()));
@@ -2049,9 +2061,15 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 				'credit_points',
 				$this->seminar->getCreditPoints()
 			);
-			$this->setMarker(
-				'teaser', $this->seminar->getLinkedFieldValue($this, 'teaser')
-			);
+			// get English teaser
+			if (t3lib_div::_GP('L')==1)		
+				$this->setMarker(
+					'teaser', $this->seminar->getLinkedFieldValue($this, 'teaser_en')
+				);
+			else
+				$this->setMarker(
+					'teaser', $this->seminar->getLinkedFieldValue($this, 'teaser')
+				);
 			$this->setMarker(
 				'speakers', $this->seminar->getSpeakersShort($this)
 			);
@@ -2575,6 +2593,13 @@ class tx_seminars_pi1 extends tx_oelib_templatehelper {
 		if ($this->seminar->isOwnerFeUser()) {
 			return TRUE;
 		}
+		
+		// gtn
+		$globalmoderators = $this->getConfValueString('globalModeratorsUID','s_template_special');
+		$globalmoderators_arr = explode(',', $globalmoderators);
+		if (in_array($this->getFeUserUid(), $globalmoderators_arr)) 
+				return TRUE;
+		// gtn 
 
 		$mayManagersEditTheirEvents = $this->getConfValueBoolean(
 			'mayManagersEditTheirEvents', 's_listView'

@@ -203,6 +203,14 @@ class tx_seminars_BackEnd_EventsList extends tx_seminars_BackEnd_List {
 					$useManualSorting, $sortList, $event->getUid()
 				)
 			);
+/*gtn start */
+			$this->template->setMarker(
+				'food_amount_button',
+				$this->getFoodAmountIcon(
+					$event->getPageUid(), $event->getUid()
+				)
+			); 
+/* gtn end */
 			$this->template->setMarker(
 				'csv_registration_export_button',
 				(($event->needsRegistration() && !$event->isHidden())
@@ -562,6 +570,16 @@ class tx_seminars_BackEnd_EventsList extends tx_seminars_BackEnd_List {
 			$GLOBALS['LANG']->getLL('label_show_event_registrations') .
 			'</a>';
 	}
+	
+/* gtn start */
+	private function getFoodAmountIcon($pid, $seminarid) {
+		$href = '/typo3conf/ext/seminars/BackEnd/index.php?id='.$pid.'&seminar='.$seminarid.'&subModule=6';
+		$icon = 'food_edit.png';
+		$label = 'Edit foods';
+		return '<a href="'.$href.'"><img src="' . $icon . '" title="' . $label . '" alt="' . $label . '" /></a>';
+	}
+/* gtn end */
+	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/BackEnd/class.tx_seminars_BackEnd_EventsList.php']) {

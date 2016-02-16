@@ -32,6 +32,7 @@ define('SEMINARS_TABLE_EVENT_TYPES', 'tx_seminars_event_types');
 define('SEMINARS_TABLE_CHECKBOXES', 'tx_seminars_checkboxes');
 define('SEMINARS_TABLE_LODGINGS', 'tx_seminars_lodgings');
 define('SEMINARS_TABLE_FOODS', 'tx_seminars_foods');
+define('SEMINARS_TABLE_ACCESSORIES', 'tx_seminars_accessoriess');
 define('SEMINARS_TABLE_TIME_SLOTS', 'tx_seminars_timeslots');
 define('SEMINARS_TABLE_TARGET_GROUPS', 'tx_seminars_target_groups');
 define('SEMINARS_TABLE_CATEGORIES', 'tx_seminars_categories');
@@ -49,6 +50,7 @@ define('SEMINARS_TABLE_ATTENDANCES_CHECKBOXES_MM', 'tx_seminars_attendances_chec
 define('SEMINARS_TABLE_SEMINARS_LODGINGS_MM', 'tx_seminars_seminars_lodgings_mm');
 define('SEMINARS_TABLE_ATTENDANCES_LODGINGS_MM', 'tx_seminars_attendances_lodgings_mm');
 define('SEMINARS_TABLE_SEMINARS_FOODS_MM', 'tx_seminars_seminars_foods_mm');
+define('SEMINARS_TABLE_SEMINARS_ACCESSORIES_MM', 'tx_seminars_seminars_accessories_mm');
 define('SEMINARS_TABLE_ATTENDANCES_FOODS_MM', 'tx_seminars_attendances_foods_mm');
 define('SEMINARS_TABLE_TIME_SLOTS_SPEAKERS_MM', 'tx_seminars_timeslots_speakers_mm');
 define('SEMINARS_TABLE_SEMINARS_TARGET_GROUPS_MM', 'tx_seminars_seminars_target_groups_mm');

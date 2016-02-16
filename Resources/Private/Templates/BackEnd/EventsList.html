@@ -12,7 +12,7 @@
 		<thead>
 			<tr class="t3-row-header">
 				<td>&nbsp;</td>
-				<td>###LABEL_ACCREDITATION_NUMBER###</td>
+<!--				<td>###LABEL_ACCREDITATION_NUMBER###</td> -->
 				<td>###LABEL_TITLE###</td>
 				<td>###LABEL_DATE###</td>
 				<td>&nbsp;</td>
@@ -25,6 +25,8 @@
 				<td>###LABEL_STATUS###</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,9 +35,9 @@
 				<td>
 					###ICON###
 				</td>
-				<td>
+<!--				<td>
 					###ACCREDITATION_NUMBER###
-				</td>
+				</td> -->
 				<td>
 					###TITLE###
 				</td>
@@ -47,6 +49,7 @@
 					###DELETE_BUTTON###
 					###HIDE_UNHIDE_BUTTON###
 					###UP_DOWN_BUTTONS###
+					###FOOD_AMOUNT_BUTTON###
 				</td>
 				<td class="attendees">
 					###CSV_REGISTRATION_EXPORT_BUTTON###&nbsp;###SHOW_REGISTRATIONS###&nbsp;###NUMBER_OF_ATTENDEES###
@@ -68,6 +71,16 @@
 				</td>
 				<td class="status">
 					###STATUS###
+				</td>
+				<td class="invoice_button">
+					<!-- ###INVOICE_BUTTON### -->
+						<form action="/index.php?eID=seminars_invoice_manager" method="post" target="_blank"><p><button class="create_pdf"><p>Rechnung</p></button><input type="hidden" name="eventUid" value="###UID###" /><input type="hidden" name="action" value="invoiceEvent" /></p></form>
+					<!-- ###INVOICE_BUTTON### -->
+				</td>
+				<td class="invoice_button_participants">
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
+						<form action="/index.php?eID=seminars_invoice" method="post" target="_blank"><p><button class="create_pdf_participants"><p>Teilnehmer Rechnung</p></button><input type="hidden" name="eventUid" value="###UID###" /><input type="hidden" name="action" value="invoiceEvent" /></p></form>
+					<!-- ###INVOICE_BUTTON_PARTICIPANTS### -->
 				</td>
 				<td class="cancel_button">
 					<!-- ###CANCEL_BUTTON### -->

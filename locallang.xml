@@ -26,6 +26,7 @@
 			<label index="label_attendees_names">Registered persons</label>
 			<label index="label_lodgings">Selected lodging options</label>
 			<label index="label_foods">Selected food options</label>
+			<label index="label_accessories">Selected accessorie options</label>
 			<label index="label_kids">Number of kids</label>
 			<label index="label_price">Price</label>
 			<label index="label_price_general">Price</label>
@@ -74,6 +75,8 @@
 			<label index="label_waiting_list">waiting list</label>
 			<label index="label_yes">yes</label>
 			<label index="label_no">no</label>
+			<label index="measure.I.0">person/half day</label>
+			<label index="measure.I.1">bottle</label>
 			<label index="message_notLoggedIn_formal">Please log in first.</label>
 			<label index="message_notLoggedIn_informal">Please log in first.</label>
 			<label index="message_alreadyRegistered_formal">You already have registered for this event.</label>
@@ -98,6 +101,7 @@
 			<label index="message_accessDenied_informal">Sorry, you don't have access to this part of the site.</label>
 			<label index="email_confirmationSubject">Registration confirmation</label>
 			<label index="email_confirmationHello_formal">thank you for registering for the event &quot;%s&quot;</label>
+			<label index="email_confirmationHello_formal2">Thank you for registering for the event &quot;%s&quot;</label>
 			<label index="email_confirmationHello_informal">thank you for registering for the event &quot;%s&quot;</label>
 			<label index="email_price">at the total price of %s</label>
 			<label index="email_confirmationOnUnregistrationSubject">Unregistration confirmation</label>
@@ -140,6 +144,34 @@ the event &quot;%event&quot; (Event number: %uid) will take place in %days days.
 
 the speakers' cancelation deadline for the event &quot;%event&quot; has just passed (Event number: %uid, begin date: %begin_date). Currently, the event is neither confirmed nor canceled and there are %registrations registrations for this event.</label>
 			<label index="label_planned_disclaimer">For this event to take place, a minimum number of registrations is needed. In case this number is not reached, the event will not take place. Of course, you then will be notified as soon as possible.</label>
+			<label index="register_now">I want to register now</label>
+			<label index="comments">Comments</label>
+			<label index="register_now_submit">Register now</label>
+			<label index="email_registrationwithoutFElogin_Admin">Hello,
+			
+	a register for the event
+	%s
+	%s
+	has just been made.
+	
+	Login information:
+	
+	%s
+	
+	This is an automated message from the site.
+			</label>	
+			<label index="email_registrationwithoutFElogin_User">Hallo,
+			
+	Thanks for your registration on the event "%s"
+	%s
+	
+	These data were submitted to us:
+	
+	%s
+
+	with warm greetings
+	Your Salonhosting Team
+			</label>
 		</languageKey>
 		<languageKey index="dk" type="array">
 			<label index="pi1_title">Arrangementsmanager</label>
@@ -205,6 +237,8 @@ the speakers' cancelation deadline for the event &quot;%event&quot; has just pas
 			<label index="label_waiting_list">Venteliste</label>
 			<label index="label_yes">Ja</label>
 			<label index="label_no">Nej</label>
+			<label index="measure.I.0">Person/halben Tag</label>
+			<label index="measure.I.1">Flasche</label>
 			<label index="message_notLoggedIn_formal">Venligst log in først.</label>
 			<label index="message_notLoggedIn_informal">Venligst log in først.</label>
 			<label index="message_alreadyRegistered_formal">De er allerede tilmeldt dette arrangement.</label>
@@ -314,6 +348,8 @@ En persons tilmelding blev lige til en almindelig tilmelding til arrangementet:<
 			<label index="label_waiting_list">Warteliste</label>
 			<label index="label_yes">ja</label>
 			<label index="label_no">nein</label>
+			<label index="measure.I.0">Person/halben Tag</label>
+			<label index="measure.I.1">Flasche</label>
 			<label index="message_notLoggedIn_formal">Bitte loggen Sie sich zuerst ein.</label>
 			<label index="message_notLoggedIn_informal">Bitte logge dich zuerst ein.</label>
 			<label index="message_alreadyRegistered_formal">Sie sind für diese Veranstaltung bereits angemeldet.</label>
@@ -338,6 +374,7 @@ En persons tilmelding blev lige til en almindelig tilmelding til arrangementet:<
 			<label index="message_accessDenied_informal">Zu diesem Teil der Site hast du leider keine Zugangsberechtigung.</label>
 			<label index="email_confirmationSubject">Anmeldebestätigung</label>
 			<label index="email_confirmationHello_formal">vielen Dank für Ihre Anmeldung zur Veranstaltung &quot;%s&quot;</label>
+			<label index="email_confirmationHello_formal2">Vielen Dank für Ihre Anmeldung zur Veranstaltung &quot;%s&quot;</label>
 			<label index="email_confirmationHello_informal">vielen Dank für deine Anmeldung zur Veranstaltung &quot;%s&quot;</label>
 			<label index="email_price">zum Gesamtpreis von %s</label>
 			<label index="email_confirmationOnUnregistrationSubject">Abmeldebestätigung</label>
@@ -380,6 +417,34 @@ die Veranstaltung &quot;%event&quot; (Veranstaltungsnummer: %uid) beginnt in %da
 
 das Ende der Absagefrist für die ReferentInnen der Veranstaltung &quot;%event&quot; wurde erreicht (Veranstaltungsnummer: %uid, Beginn: %begin_date). Zur Zeit ist diese Veranstaltung weder bestätigt noch abgesagt und es gibt %registrations Anmeldungen für diese Veranstaltung.</label>
 			<label index="label_planned_disclaimer">Eine Mindestteilnehmer­zahl ist Voraussetzung für die Durchführung dieser Veranstaltung. Wird diese nicht erreicht, findet die Veranstaltung nicht statt. Selbstver­ständlich werden wir Sie rechtzeitig informieren.</label>
+			<label index="register_now">Ich möchte mich jetzt anmelden</label>
+			<label index="comments">Kommentare</label>
+			<label index="register_now_submit">Jetzt anmelden</label>
+			<label index="email_registrationwithoutFElogin_Admin">Hallo,
+			
+	eine Anmeldung zur Veranstaltung
+	%s
+	%s
+	wurde soeben getätigt.
+	
+	Anmeldedaten:
+	
+	%s
+	
+	Das ist eine automatische Nachricht von der Website.
+			</label>		
+			<label index="email_registrationwithoutFElogin_User">Hallo,
+			
+	Vielen Dank für Ihre Anmeldung zur Veranstaltung "%s"
+	%s
+	
+	Diese Daten wurden an uns übermittelt:
+	
+	%s
+	
+	mit schönen Grüßen
+	Ihr Salonhosting Team
+			</label>	
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="pi1_title">Seminar manager</label>

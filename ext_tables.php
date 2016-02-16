@@ -227,6 +227,22 @@ $TCA['tx_seminars_foods'] = array(
 	)
 );
 
+$TCA['tx_seminars_accessories'] = array(
+	'ctrl' => array(
+		'title' => 'LLL:EXT:seminars/locallang_db.xml:tx_seminars_accessories',
+		'label' => 'title',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY title',
+		'delete' => 'deleted',
+		'dynamicConfigFile' => $tcaPath,
+		'iconfile' => $extIconRelPath . 'icon_tx_seminars_accessories.gif',
+		'searchFields' => 'title'
+	)
+);
+
+
 $TCA['tx_seminars_timeslots'] = array(
 	'ctrl' => array(
 		'title' => 'LLL:EXT:seminars/locallang_db.xml:tx_seminars_timeslots',

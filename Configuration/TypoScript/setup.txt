@@ -460,7 +460,7 @@ plugin.tx_seminars_pi1 {
 	allowedExtensionsForUpload = jpg,jpeg,png,bmp,gif,tiff,tif,txt,pdf,ps,svg,doc,docx,sxw,odt,xls,xlsx,sxc,ods,ppt,pptx,sxi,odp,html,htm,css,js,xml,xsd,zip,rar,gz,tgz,tar,bz2,tbz,tbz2
 
 	# comma-separated list of the fields to show in the FE-editor
-	displayFrontEndEditorFields = subtitle,accreditation_number,credit_points,categories,event_type,cancelled,teaser,description,additional_information,begin_date,end_date,begin_date_registration,deadline_early_bird,deadline_registration,needs_registration,allows_multiple_registrations,queue_size,offline_attendees,attendees_min,attendees_max,target_groups,price_regular,price_regular_early,price_regular_board,price_special,price_special_early,price_special_board,payment_methods,place,room,lodgings,foods,speakers,leaders,partners,tutors,checkboxes,uses_terms_2,attached_file_box,notes
+	displayFrontEndEditorFields = subtitle,accreditation_number,credit_points,categories,event_type,cancelled,teaser,description,additional_information,begin_date,end_date,begin_date_registration,deadline_early_bird,deadline_registration,needs_registration,allows_multiple_registrations,queue_size,offline_attendees,attendees_min,attendees_max,target_groups,price_regular,price_regular_early,price_regular_board,price_special,price_special_early,price_special_board,payment_methods,place,room,lodgings,foods,speakers,leaders,partners,tutors,checkboxes,uses_terms_2,attached_file_box,notes,accessories
 
 	# comma-separated list of the fields which are required to be filled in the FE-edior
 	requiredFrontEndEditorFields =
@@ -548,6 +548,10 @@ plugin.tx_seminars_pi1 {
 						organizers {
 							field = organizers
 							mmtable = tx_seminars_seminars_organizers_mm
+						}
+						accessories {
+							field = accessories
+							mmtable = tx_seminars_seminars_accessories_mm
 						}
 					}
 					process.beforeinsertion.userobj {
@@ -1196,6 +1200,30 @@ plugin.tx_seminars_pi1 {
 						}
 					}
 				}
+
+				accessories = renderlet:CHECKBOX
+				accessories {
+					name = accessories
+					label = LLL:EXT:seminars/locallang_db.xml:tx_seminars_seminars.accessories
+					class = tx-seminars-pi1-event-editor-checkbox
+					data.userobj {
+						extension = this
+						method = populateListAccessories
+					}
+					validators {
+						10 = validator:STANDARD
+						10.userobj {
+							message = LLL:EXT:seminars/pi1/locallang.xml:message_noAccessoriesChosen
+							extension = this
+							method = validateCheckboxes
+							params {
+								10.name = elementName
+								10.value = accessories
+							}
+						}
+					}
+				}
+
 
 				speakers = renderlet:CHECKBOX
 				speakers {
@@ -3625,6 +3653,7 @@ plugin.tx_seminars_pi1 {
 							}
 						}
 					}
+
 
 					checkboxes = renderlet:CHECKBOX
 					checkboxes {

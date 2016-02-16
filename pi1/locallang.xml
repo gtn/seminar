@@ -210,7 +210,7 @@
 			<label index="label_unhide">unhide</label>
 			<label index="label_back">Back to listing</label>
 			<label index="label_save">Save</label>
-			<label index="label_save_and_back">Save and back</label>
+			<label index="label_save_and_back">Speichern und Zurück</label>
 			<label index="label_step_counter">Registration form: step %d of %d</label>
 			<label index="label_register_additional_information">Additional information</label>
 			<label index="label_checkboxes">Additional information:</label>
@@ -220,6 +220,7 @@
 			<label index="label_register_lodging_and_food">Lodging and food</label>
 			<label index="label_accommodation">How are your lodging preferences (if possible a single room, a double room, no lodging)?</label>
 			<label index="label_food">Which kind of food do you prefer (normal, vegetarian, or a special diet):</label>
+			<label index="label_accessorie">Which kind of accessorie do you prefer:</label>
 			<label index="label_known_from_formal">How have you heard of this event?</label>
 			<label index="label_known_from_informal">How have you heard of this event?</label>
 			<label index="label_notes">Additional notes:</label>
@@ -249,6 +250,7 @@
 			<label index="label_email">E-mail address:</label>
 			<label index="label_lodgings">Lodging:</label>
 			<label index="label_foods">Food:</label>
+			<label index="label_accessories">Accessories:</label>
 			<label index="label_register_entered_data_formal">Your registration data</label>
 			<label index="label_register_entered_data_informal">Your registration data</label>
 			<label index="label_register_all_terms">Registration terms</label>
@@ -304,6 +306,7 @@
 			<label index="message_noRegistrations">For this event, there are no registrations yet.</label>
 			<label index="message_earlybird_price">price valid and bookable until %s</label>
 			<label index="message_emptyTitle">Please enter a title.</label>
+			<label index="message_emptyEmail">Please enter a Email.</label>
 			<label index="message_emptyName">Please enter a name.</label>
 			<label index="message_emptyOrganizer">Please select at least one organizer.</label>
 			<label index="message_emptySubtitle">Please enter a subtitle.</label>
@@ -382,11 +385,32 @@
 			<label index="newTargetGroupButton">Create new target group</label>
 			<label index="message_publishingSuccessful">The event has been published.</label>
 			<label index="message_publishingFailed">There is no such pending event.</label>
-			<label index="publish_event_subject">Event available for publication</label>
-			<label index="label_publish_event_text">An event has been edited in the front-end editor and currently is awaiting publication.</label>
-			<label index="label_publish_event_overview">The entered data as an overview:</label>
-			<label index="label_publish_event_link">If you want to publish this event, please click this link:</label>
-			<label index="label_publish_event_notice">If you do not want to publish this event, no action is needed.</label>
+			<label index="publish_event_subject">Veranstaltungsreservierung Salonhosting Website</label>
+			<label index="label_publish_event_text">Es wurde eine Anfrage für eine Reservierung gemacht. Die Veranstaltung ist bereits angelegt und kann bei Bedarf veröffentlicht werden.</label>
+			<label index="label_publish_event_overview">Die eingegebenen Daten in der Übersicht:</label>
+			<label index="label_publish_event_link">Wenn Sie diese Veranstaltung veröffentlichen möchten, klicken Sie bitte auf diesen Link:</label>
+			<label index="label_publish_event_notice">Wenn Sie die Veranstaltung nicht veröffentlichen möchten, brauchen Sie einfach nichts zu tun.</label>
+			<label index="text_to">bis</label>
+			<label index="user_event_register_subject">www.bregenzersalon.at</label>
+			<label index="user_event_register_message"><![CDATA[Sehr geehrter ###first_name### ###last_name###
+
+Wir haben Ihre Reservierungsanfrage für den Bregenzer Salon gut empfangen, und danken Ihnen dafür. Sie werden in Kürze eine Bestätigung erhalten. Sollten Sie noch weitere Fragen haben, schreiben Sie uns doch bitte.
+
+Peter Brattinga & Ursula Hillbrand
+
+Ihre Reservierung:
+
+Veranstaltung: ###event_title###
+Datum: ###event_date_start### ###event_date_end###
+Beschreibung: ###event_description###
+Räume: ###selected_room###
+Anzahl der Personen: ###count_of_persons###
+Zusatzliches: ###accessories###
+Verfugbare Verpflegungsmoglichkeiten: ###foods###
+
+Zusammenfassung Preis: ###calculated_price### EURO
+Die genannten Preisen sind ohne Mwst.]]>
+</label>
 		</languageKey>
 		<languageKey index="dk" type="array">
 			<label index="seminars.pi_flexform.sheet_general">Generelt</label>
@@ -906,6 +930,7 @@
 			<label index="message_noRegistrations">Für diese Veranstaltung liegen bisher noch keine Anmeldungen vor.</label>
 			<label index="message_earlybird_price">Preis gültig und buchbar bis %s</label>
 			<label index="message_emptyTitle">Bitte geben Sie einen Titel ein.</label>
+			<label index="message_emptyEmail">Bitte geben Sie einen E-mail ein.</label>
 			<label index="message_emptyName">Bitte geben Sie einen Namen an.</label>
 			<label index="message_emptyOrganizer">Bitte wählen Sie mindestens einen Veranstalter aus.</label>
 			<label index="message_emptySubtitle">Bitte geben Sie einen Untertitel ein.</label>
@@ -985,10 +1010,19 @@
 			<label index="message_publishingSuccessful">Die Veranstaltung wurde veröffentlicht.</label>
 			<label index="message_publishingFailed">Es konnte keine entsprechend ausstehende Veranstaltung gefunden werden.</label>
 			<label index="publish_event_subject">Veranstaltung zum Freischalten verfügbar</label>
-			<label index="label_publish_event_text">Eine Veranstaltung ist im Front-end bearbeitet worden und müsste noch veröffentlicht werden.</label>
+			<label index="label_publish_event_text">Es wurde eine Anfrage für eine Reservierung gemacht. Die Veranstaltung ist bereits angelegt und kann bei Bedarf veröffentlicht werden.</label>
 			<label index="label_publish_event_overview">Die eingegebenen Daten in der Übersicht:</label>
 			<label index="label_publish_event_link">Wenn Sie diese Veranstaltung veröffentlichen möchten, klicken Sie bitte auf diesen Link:</label>
 			<label index="label_publish_event_notice">Wenn Sie die Veranstaltung nicht veröffentlichen möchten, brauchen Sie einfach nichts zu tun.</label>
+			<label index="user_event_register_subject">www.bregenzersalon.at</label>
+			<label index="user_event_register_message">Sehr geehrter ###first_name### ###last_name###
+
+Vielen Dank für ihre Anmeldung zu ###event_title### am ###event_date###
+
+Wir freuen uns über ihre Teilnahme.
+
+schöne Grüße
+das Team vom Bregenzer Salon</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="seminars.pi_flexform.sheet_general">Algemeen</label>

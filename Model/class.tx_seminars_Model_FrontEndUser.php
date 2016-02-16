@@ -49,7 +49,7 @@ class tx_seminars_Model_FrontEndUser extends tx_oelib_Model_FrontEndUser {
 	 */
 	public function getPublishSetting() {
 		$userGroups = $this->getUserGroups();
-		if ($userGroups->isEmpty()) {
+		if ($userGroups->isEmpty()) { 
 			return tx_seminars_Model_FrontEndUserGroup::PUBLISH_IMMEDIATELY;
 		}
 
@@ -57,7 +57,6 @@ class tx_seminars_Model_FrontEndUser extends tx_oelib_Model_FrontEndUser {
 
 		foreach ($userGroups as $userGroup) {
 			$groupPermissions = $userGroup->getPublishSetting();
-
 			$result = ($groupPermissions > $result)
 				? $groupPermissions
 				: $result;

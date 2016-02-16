@@ -248,7 +248,7 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		$foods= tx_oelib_MapperRegistry::get('tx_seminars_Mapper_Food')
 			->findByPageUid($this->getPidsForAuxiliaryRecords(), 'title ASC');
 
-		return self::makeListToFormidableList($foods, 'foods');
+		return self::makeListToFormidableList($foods);
 	}
 
 	/**
@@ -260,7 +260,7 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 	 */
 	public function populateListAccessories() {
 		$accessories= tx_oelib_MapperRegistry::get('tx_seminars_Mapper_Accessory')
-			->findByPageUid($this->getPidsForAuxiliaryRecords(), 'title ASC,tx_gtnseminarsext_price');
+			->findByPageUid($this->getPidsForAuxiliaryRecords(), 'title ASC');
 
 		return self::makeListToFormidableList($accessories);
 	}
@@ -613,15 +613,6 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		if ($rawPost['btncalculate']) {		
 			return NULL;
 		};
-
-		// add food amounts 
-		// may be this is double. but editing of event also need the updating of amount
-		$event_uid = $this->getFormCreator()->oDataHandler->oForm->oDataHandler->_currentEntryId();
-		$foods = $rawPost['foods'];
-		$amounts = $rawPost['food_amount'];
-		foreach($amounts as $food=>$amount) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_seminars_seminars_foods_mm', 'uid_local='.$event_uid.' and uid_foreign='.$food, array('food_amount'=>$amount));
-		};		/**/
 /* gtn end */		
 		
 		if ($this->getFormValue('proceed_file_upload')) {
@@ -636,10 +627,6 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 			);
 		}
 
-		// email to user
-		$this->sendEMailToUser();
-		
-		
 		return t3lib_div::locationHeaderUrl(
 			$this->cObj->typoLink_URL(array(
 				'parameter' => $pageId,
@@ -671,13 +658,6 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		) {
 			return 'message_wrongSeminarNumber';
 		}
-		
-		// gtn
-		$globalmoderators = $this->getConfValueString('globalModeratorsUID','s_template_special');
-		$globalmoderators_arr = explode(',', $globalmoderators);
-		if (in_array($this->getFeUserUid(), $globalmoderators_arr)) 
-				return '';
-		// gtn 
 
 		if ($this->getObjectUid() > 0) {
 			$seminar = tx_oelib_ObjectFactory::make(
@@ -900,20 +880,18 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		$modifiedFormData = $formData;
 /* gtn start */		
 		$rawPost = $this->getFormCreator()->_getRawPost();
-//		var_dump($rawPost);
 		if ($rawPost['btncalculate']) {		
 //			echo $this->calcPrice($formData);
 			return NULL;
 		};
 /* gtn end */		
-		
 		$this->processAttachments($modifiedFormData);
 		$this->purgeNonSeminarsFields($modifiedFormData);
 		$this->unifyDecimalSeparators($modifiedFormData);
 		$this->addAdministrativeData($modifiedFormData);
 		$this->checkPublishSettings($modifiedFormData);
 		$this->addCategoriesOfUser($modifiedFormData);
-		
+
 		return $modifiedFormData;
 	}
 
@@ -1343,17 +1321,6 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 			return;
 		}
 
-/* gtn add food amounts. I placed it there because this data needs to the email */
-		// add food amounts
-		$rawPost = $this->getFormCreator()->_getRawPost();		
-		$event_uid = $this->getFormCreator()->oDataHandler->oForm->oDataHandler->_currentEntryId();
-		$foods = $rawPost['foods'];
-		$amounts = $rawPost['food_amount'];
-		foreach($amounts as $food=>$amount) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_seminars_seminars_foods_mm', 'uid_local='.$event_uid.' and uid_foreign='.$food, array('food_amount'=>$amount));
-		};		/**/
-/* gtn */		
-		
 		$event = tx_oelib_MapperRegistry::get('tx_seminars_Mapper_Event')
 			->findByPublicationHash($this->publicationHash);
 
@@ -1403,52 +1370,6 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		);
 
 		$this->setMarker('link', $this->createReviewUrl(), $markerPrefix);
-/* gtn start */
-		//$this->setMarker('hello_admin', $this->getConfValueString('reviewerEmailHelloMessage'), $markerPrefix);
-		$this->setMarker('hello_admin', $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_seminars_pi1.']['reviewerEmailHelloMessage'], $markerPrefix);
-		
-		// rooms
-		if ($event->getRoom())
-			$selected_room[] = $this->conf['priceroom.'][$event->getRoom().'.']['label'].' im '.$this->conf['priceroom.']['title'];
-		if ($event->getRoom2())
-			$selected_room[] = $this->conf['priceroom2.'][$event->getRoom2().'.']['label'].' im '.$this->conf['priceroom2.']['title'];
-		if ($event->getKitchen())
-			$selected_room[] = $this->conf['pricekitchen.'][$event->getKitchen().'.']['label'].' im '.$this->conf['pricekitchen.']['title']; /**/
-		$this->setMarker('rooms', implode(", ", $selected_room), $markerPrefix);
-		
-		// accessories
-		$query = 'SELECT tx_seminars_accessories.title as title FROM tx_seminars_seminars, tx_seminars_seminars_accessories_mm, tx_seminars_accessories WHERE tx_seminars_seminars.uid = tx_seminars_seminars_accessories_mm.uid_local AND tx_seminars_accessories.uid = tx_seminars_seminars_accessories_mm.uid_foreign AND tx_seminars_seminars.uid ='.$event->getEventUid();
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		while ($food = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$accessories[] = $food['title'];
-		};			
-		if (count($accessories)>0)
-			$accessories_str = ' mit '.implode(", ", $accessories); 						
-		else 
-			$accessories_str = '';
-		$this->setMarker('accessories', $accessories_str, $markerPrefix);
-		
-		//persons		
-		if ($event->getPersonCount() > 0)
-			$person_count = ', '.$event->getPersonCount().' Personen';
-		else 
-			$person_count = '';
-		$this->setMarker('personen', $person_count, $markerPrefix);
-		
-		
-		// food
-		$query = 'SELECT tx_seminars_foods.title as title, tx_seminars_seminars_foods_mm.food_amount as food_amount FROM tx_seminars_seminars, tx_seminars_seminars_foods_mm, tx_seminars_foods WHERE tx_seminars_seminars.uid = tx_seminars_seminars_foods_mm.uid_local AND tx_seminars_foods.uid = tx_seminars_seminars_foods_mm.uid_foreign AND tx_seminars_seminars.uid ='.$event->getEventUid();
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		while ($food = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$foods[] = $food['food_amount'].' '.$food['title'];
-		};			
-		if (count($foods)>0)
-			$foods_str = ', '.implode(", ", $foods); 						
-		else 
-			$foods_str = '';
-		$this->setMarker('food', $foods_str, $markerPrefix);
-		
-/* gtn end */		
 
 		return $this->getSubpart('MAIL_PUBLISH_EVENT');
 	}
@@ -2506,42 +2427,18 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 	 *         and "value" (for the UID), will be empty if an empty model list
 	 *         was provided
 	 */
-	public static function makeListToFormidableList(tx_oelib_List $models, $add_code='') {
+	public static function makeListToFormidableList(tx_oelib_List $models) {
 		if ($models->isEmpty()) {
 			return array();
 		}
 
 		$result = array();
-		$rawPost = t3lib_div::_POST();
+
 		foreach ($models as $model) {
-			if ($add_code=='foods') {				
-				$uid = $model->getUid();
-				$seminar = t3lib_div::_GET('tx_seminars_pi1');
-				$val = "";				
-				if (($rawPost['tx_seminars_pi1_seminars']['food_amount'][$uid]<>'') and (in_array($uid,$rawPost['tx_seminars_pi1_seminars']['foods'])))  {
-					$val = $rawPost['tx_seminars_pi1_seminars']['food_amount'][$uid];
-				};
-				if ($val == "") {
-					$food = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-						'tx_seminars_seminars_foods_mm.food_amount as food_amount',
-						'tx_seminars_seminars_foods_mm',
-						'uid_local = '.$seminar['seminar'].' AND uid_foreign = '.$uid.'');  
-					if (is_array($food))
-						$val = $food['food_amount'];
-				};
-				$result[] = array(
-					'caption' => $model->getTitle(),
-					'value' => $model->getUid(),
-					'wrapitem' => '|<input type="text" name="tx_seminars_pi1_seminars[food_amount]['.$model->getUid().']" style="width:30px;" value="'.$val.'">',
-				);
-//print_r($rawPost); echo "\r\n\r\n";
-//exit;
-			}
-			else
-				$result[] = array(
-					'caption' => $model->getTitle(),
-					'value' => $model->getUid(),
-				);
+			$result[] = array(
+				'caption' => $model->getTitle(),
+				'value' => $model->getUid(),
+			);
 		}
 
 		return $result;
@@ -2645,11 +2542,12 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 		return 'CALC PRICE';
 	}
 	
-	public function calculateMessage($formData, $onlySum = 0) {
+	public function calculateMessage($formData) {
 		$rawPost = $this->getFormCreator()->_getRawPost();
-		//var_dump($rawPost);
-		//$rawPost = $this->getFormCreator()->_getRawPost();
-		if ((($rawPost['btncalculate']) or ($onlySum==2)) and $this->getFormCreator()->oDataHandler->_allIsValid()) {		
+//		var_dump($rawPost);
+		$rawPost = $this->getFormCreator()->_getRawPost();
+		if ($rawPost['btncalculate'] and $this->getFormCreator()->oDataHandler->_allIsValid()) {		
+			
 			$count_days = ceil((strtotime(substr($rawPost['end_date'],6))-strtotime(substr($rawPost['begin_date'],6)))/86400)+1;
 			if ($count_days<=0) 
 				$count_days = 1;
@@ -2678,38 +2576,21 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 			//food
 			$in = '';
 			if ($rawPost['foods']) {
-				foreach ($rawPost['foods'] as $key=>$food) {
+				foreach ($rawPost['foods'] as $key=>$food)
 					$in .= $food.',';
-					$food_sql = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-						'tx_seminars_foods.tx_gtnseminarsext_price as price',
-						'tx_seminars_foods',
-						'uid ='.$food.''
-					);  /**/									
-					if ($rawPost['food_amount'][$food]>0)
-						$amount_f = $rawPost['food_amount'][$food];
-					else
-						$amount_f = 1;
-					$food_price += $food_sql['price'] * $amount_f;
-				};
-				/*$in = substr($in,0,-1);
+				$in = substr($in,0,-1);
 				$foods = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
 					'SUM(tx_seminars_foods.tx_gtnseminarsext_price) as price_sum',
 					'tx_seminars_foods',
 					'uid IN('.$in.')'
 				);  
-				$food_price = $foods['price_sum'];/**/
+				$food_price = $foods['price_sum'];
 			};
 			
 			// total price
-			//$total_price = $price_room*$count_days + $accessory_price*$count_days + $food_price*$rawPost['number_of_persons']*$count_days ;			
-			$total_price = $price_room*$count_days + $accessory_price*$count_days + $food_price*$count_days ;			
-
-			if ($onlySum == 2)
-				return $total_price;
-			elseif(!$rawPost['btncalculate'])
-				return '';
-			else
-				return '<h5>Gesamt Betrag '.$total_price.' &euro; </h5>';
+			$total_price = $price_room*$count_days + $accessory_price*$count_days + $food_price*$rawPost['number_of_persons']*$count_days ;			
+			
+			return '<h5>Gesamt Betrag '.$total_price.' &euro; </h5>';
 		};
 		return '';
 	}
@@ -2719,10 +2600,9 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 			$room_list = array();
 			if (is_array($this->conf['priceroom.'])) {
 					foreach($this->conf['priceroom.'] as $item=>$params) {
-						if ($item<>'title')
-							$room_list[] = array (
-								'caption' => $params['label']." (".$params["price"]."â‚¬)",
-								'value' => substr($item,0,-1));
+						$room_list[] = array (
+							'caption' => $params['label']." (".$params["price"]." €)",
+							'value' => substr($item,0,-1));
 					}
 				}
 			return $room_list;
@@ -2733,144 +2613,13 @@ class tx_seminars_pi1_eventEditor extends tx_seminars_pi1_frontEndEditor {
 			$room_list = array();
 			if (is_array($this->conf['priceroom2.'])) {
 					foreach($this->conf['priceroom2.'] as $item=>$params) {
-						if ($item<>'title')
-							$room_list[] = array (
-								'caption' => $params['label']." (".$params["price"]."â‚¬)",
-								'value' => substr($item,0,-1));
-					}
-				}
-			return $room_list;
-	}	
-	public function populateListKitchen_Prices($formData) {		
-			$room_list = array();
-			if (is_array($this->conf['pricekitchen.'])) {
-					foreach($this->conf['pricekitchen.'] as $item=>$params) {
-						if ($item<>'title')
-							$room_list[] = array (
-								'caption' => $params['label']." (".$params["price"]."â‚¬)",
-								'value' => substr($item,0,-1));
+						$room_list[] = array (
+							'caption' => $params['label']." (".$params["price"]." €)",
+							'value' => substr($item,0,-1));
 					}
 				}
 			return $room_list;
 	}
-	
-	// !!! This function does not work !!!!!  typoscrit configuration with
-	public function addAmountToFoods() {
-		$event_uid = $this->getFormCreator()->oDataHandler->oForm->oDataHandler->_currentEntryId();
-		$event_uid = 142;
-		$rawPost = $this->getFormCreator()->_getRawPost();
-		$foods = $rawPost['foods'];
-		$amounts = $rawPost['food_amount'];
-		foreach($amounts as $food=>$amount) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_seminars_seminars_foods_mm', 'uid_local='.$event_uid.' and uid_foreign='.$food, array('food_amount'=>$amount));
-		};
-		return true;
-	}
-	
-	/**
-	 * Sends the e-mail to the user.
-	 */
-	public function sendEMailToUser() {
-		global $LANG;
-		if ($this->publicationHash == '') {
-			return;
-		}
-		tx_oelib_MapperRegistry::purgeInstance();
-		$frontEndUser = tx_oelib_FrontEndLoginManager::getInstance()
-			->getLoggedInUser('tx_seminars_Mapper_FrontEndUser');
-		$reviewer = $frontEndUser->getReviewerFromGroup();
-/*		$sender = new tx_oelib_tests_fixtures_TestingMailRole(
-			'', 'any-sender@email-address.org'
-		);*/
-
-		if (!$frontEndUser) {
-			return;
-		}
-
-		$event = tx_oelib_MapperRegistry::get('tx_seminars_Mapper_Event')
-			->findByPublicationHash($this->publicationHash);
-
-			// locallang labels....
-//		$languageFile = t3lib_extmgm::extPath('seminars') . 'pi1/locallang.xml';
-//		$this->languageKey = 'de';
-//		$localizedLabels = t3lib_div::readLLfile($languageFile, $this->languageKey, 'utf-8');
-		
-		if ($event) {
-			$eMail = tx_oelib_ObjectFactory::make('tx_oelib_Mail');
-			$eMail->addRecipient($frontEndUser);
-			$eMail->setSender($reviewer);
-	
-			$eMail->setSubject($this->translate('user_event_register_subject'));
-			$message = $this->translate('user_event_register_message');
-			// user
-			$message = str_replace('###first_name###', $frontEndUser->getFirstName(), $message);
-			$message = str_replace('###last_name###', $frontEndUser->getLastName(), $message);			
-			// event
-			if ($event->getTitle()<>'')
-				$message = str_replace('###event_title###', $event->getTitle(), $message);
-			else
-				$message = str_replace('###event_title###', $event->getTitle('de'), $message);
-			$message = str_replace('###event_description###', $event->getDescription(), $message);
-			
-			//dates
-			$message = str_replace('###event_date_start###', date('d-m-Y', $event->getBeginDateAsUnixTimestamp()), $message);
-			
-			$text_to .= tslib_pibase::pi_getLL('text_to');						
-//$text_to .= parent::pi_getLL('text_to');
-//$text_to .= $this->translate('text_to');	
-			if ($event->getEndDateAsUnixTimestamp()>0)
-				$message = str_replace('###event_date_end###', $text_to.' '.date('d-m-Y', $event->getEndDateAsUnixTimestamp()), $message);
-			else 
-				$message = str_replace('###event_date_end###', '', $message); /**/
-				
-/*			$count_days = ceil(($event->getEndDateAsUnixTimestamp() - $event->getBeginDateAsUnixTimestamp)/86400)+1;
-			if ($count_days<=0) 
-				$count_days = 1;			
-			$message = str_replace('###count_days###', $count_days, $message); /**/
-			
-			// rooms
-			if ($event->getRoom())
-				$selected_room[] = $this->conf['priceroom.']['title'].':'.$this->conf['priceroom.'][$event->getRoom().'.']['label'];
-			if ($event->getRoom2())
-				$selected_room[] = $this->conf['priceroom2.']['title'].':'.$this->conf['priceroom2.'][$event->getRoom2().'.']['label'];
-			if ($event->getKitchen())
-				$selected_room[] = $this->conf['pricekitchen.']['title'].':'.$this->conf['pricekitchen.'][$event->getKitchen().'.']['label']; /**/
-			$message = str_replace('###selected_room###', implode(", ", $selected_room), $message);
-			
-			// accessories
-			$query = 'SELECT tx_seminars_accessories.title as title FROM tx_seminars_seminars, tx_seminars_seminars_accessories_mm, tx_seminars_accessories WHERE tx_seminars_seminars.uid = tx_seminars_seminars_accessories_mm.uid_local AND tx_seminars_accessories.uid = tx_seminars_seminars_accessories_mm.uid_foreign AND tx_seminars_seminars.uid ='.$event->getEventUid();
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			while ($food = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$accessories[] = $food['title'];
-			};			
-			$accessories_str = implode(", ", $accessories); 						
-			$message = str_replace('###accessories###', $accessories_str, $message);
-			
-			// foods
-			$query = 'SELECT tx_seminars_foods.title as title FROM tx_seminars_seminars, tx_seminars_seminars_foods_mm, tx_seminars_foods WHERE tx_seminars_seminars.uid = tx_seminars_seminars_foods_mm.uid_local AND tx_seminars_foods.uid = tx_seminars_seminars_foods_mm.uid_foreign AND tx_seminars_seminars.uid ='.$event->getEventUid();
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			while ($food = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$foods[] = $food['title'];
-			};			
-			$foods_str = implode(", ", $foods); 				
-			$message = str_replace('###foods###', $foods_str, $message);			
-			
-			// number of persons
-			$person_count = $event->getPersonCount();
-			$message = str_replace('###count_of_persons###', $person_count, $message);			
-			
-			// Calculated price
-			$formData = '';
-			$price = $this->calculateMessage($formData, 2);
-			$message = str_replace('###calculated_price###', $price, $message);			
-			
-			$eMail->setMessage($message);
-
-			tx_oelib_mailerFactory::getInstance()->getMailer()->send($eMail);
-
-			$eMail->__destruct();
-		}
-	}	
 	
 
 }

@@ -84,8 +84,9 @@ class tx_seminars_EmailSalutation {
 				$salutationParts['title'] = $this->translator->translate(
 						'email_salutation_title_' . $gender
 					);
-				$salutationParts['name'] = $user->getLastOrFullName();
-				break;
+				//$salutationParts['name'] = $user->getLastOrFullName();
+				$salutationParts['name'] = $user->getFirstName()." ".$user->getLastName();
+				break; 
 		}
 
 		foreach ($this->getHooks() as $hook) {

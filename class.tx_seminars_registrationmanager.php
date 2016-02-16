@@ -808,10 +808,10 @@ class tx_seminars_registrationmanager extends tx_oelib_templatehelper {
 		tx_seminars_registration $registration,
 		$helloSubjectPrefix = 'notification'
 	) {
+
 		if (!$this->getConfValueBoolean('send' . ucfirst($helloSubjectPrefix))) {
 			return;
 		}
-
 		if (!$registration->hasExistingFrontEndUser()) {
 			return;
 		}
@@ -1063,7 +1063,7 @@ class tx_seminars_registrationmanager extends tx_oelib_templatehelper {
 		);
 
 		$this->setMarker('uid', $event->getUid());
-
+		$this->setMarker('eventtitle', $event->getTitleAndDate());
 		$this->setMarker('registration_uid', $registration->getUid());
 
 		if ($registration->hasSeats()) {

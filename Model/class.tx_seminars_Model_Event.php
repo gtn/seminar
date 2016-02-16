@@ -103,10 +103,18 @@ class tx_seminars_Model_Event extends tx_seminars_Model_AbstractTimeSpan {
 	 *
 	 * @return string our title, will be empty if this event has no title
 	 */
-	public function getTitle() {
-		return ($this->isEventDate())
-			? $this->getTopic()->getTitle()
-			: $this->getAsString('title');
+	public function getTitle($lang = '') {
+		if ($lang<>'')
+			return ($this->isEventDate())
+				? $this->getTopic()->getTitle()
+				: $this->getAsString('title');	
+		elseif (t3lib_div::_GP('L')==1)
+			return ($this->isEventDate())
+				? $this->getTopic()->getTitle()
+				: $this->getAsString('title_en');
+		else return ($this->isEventDate())
+				? $this->getTopic()->getTitle()
+				: $this->getAsString('title');
 	}
 
 	/**
@@ -1248,6 +1256,10 @@ class tx_seminars_Model_Event extends tx_seminars_Model_AbstractTimeSpan {
 		return $this->getAsInteger('begin_date_registration');
 	}
 
+	public function getBeginDateAsUnixTimestamp() {
+		return $this->getAsInteger('begin_date');
+	}
+
 	/**
 	 * Returns the publication hash of this event.
 	 *
@@ -1318,6 +1330,25 @@ class tx_seminars_Model_Event extends tx_seminars_Model_AbstractTimeSpan {
 	public function getOfflineRegistrations() {
 		return $this->getAsInteger('offline_attendees');
 	}
+	
+	public function getRoom() {
+		return $this->getAsString('room_price_type');
+	}
+	public function getRoom2() {
+		return $this->getAsString('room2_price_type');
+	}
+	public function getKitchen() {
+		return $this->getAsString('kitchen_price_type');
+	}	
+	public function getAccessories() {
+		return $this->getAsList('accessories');
+	}	
+	public function getEventUid() {
+		return $this->getUid();
+	}			
+	public function getPersonCount() {
+		return $this->getAsInteger('number_of_persons');
+	}				
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/Model/class.tx_seminars_Model_Event.php']) {

@@ -11,12 +11,17 @@
 	<p class="tx-seminars-pi1-error" style="display: {errors.cssdisplay};">
 		{errors}
 	</p>
+	
 	<fieldset>
 		<div class="columnlight">
 			<div class="columnleft">
 				<dl>
 					<dt class="required">{title.label.tag}</dt>
 					<dd>{title}</dd>
+				</dl>
+				<dl>
+					<dt class="required">{title_en.label.tag}</dt>
+					<dd>{title_en}</dd>
 				</dl>
 				<!-- ###FE_EDITOR_SUBTITLE### -->
 				<dl>
@@ -88,6 +93,12 @@
 			<dl>
 				<dd class="teaser">{teaser}</dd>
 			</dl>
+			<dl>
+				<dt###TEASER_REQUIRED###>{teaser_en.label.tag}</dt>
+			</dl>
+			<dl>
+				<dd class="teaser">{teaser_en}</dd>
+			</dl>
 			<!-- ###FE_EDITOR_TEASER### -->
 			<!-- ###FE_EDITOR_DESCRIPTION### -->
 			<dl>
@@ -96,17 +107,13 @@
 			<dl>
 				<dd class="description">{description}</dd>
 			</dl>
+			<dl>
+				<dt###DESCRIPTION_REQUIRED###>{description_en.label.tag}</dt>
+			</dl>
+			<dl>
+				<dd class="description">{description_en}</dd>
+			</dl>
 			<!-- ###FE_EDITOR_DESCRIPTION### -->
-			<!-- ###FE_EDITOR_ADDITIONAL_INFORMATION### -->
-			<dl>
-				<dt###ADDITIONAL_INFORMATION_REQUIRED###>
-					{additional_information.label.tag}
-				</dt>
-			</dl>
-			<dl>
-				<dd class="additional_information">{additional_information}</dd>
-			</dl>
-			<!-- ###FE_EDITOR_ADDITIONAL_INFORMATION### -->
 		</div>
 	</fieldset>
 	<!-- ###FE_EDITOR_TEXT_BLOCKS### -->
@@ -230,7 +237,6 @@
 		<!-- ###FE_EDITOR_TARGET_GROUPS### -->
 		<!-- ###FE_EDITOR_PRICES### -->
 		<div class="divider">&nbsp;</div>
-
 		<div class="columnlight price">
 			<!-- ###FE_EDITOR_REGULAR_PRICES### -->
 			<div class="columnleft">
@@ -285,6 +291,67 @@
 		</div>
 		<!-- ###FE_EDITOR_PRICES###-->
 	</fieldset>
+	<fieldset class="radiobuttonPriceTypeFields">
+		<div class="columnlight">
+			<div class="columnleft">
+				<dl>
+					<dt>
+						Salon
+					</dt>
+					<dd>					
+						{room_price_type}
+					</dd>
+				</dl>
+			</div>
+			<div class="columnright">
+				<dl>
+					<dt>
+						Gelbes Zimmer
+					</dt>
+					<dd>					
+						{room2_price_type}
+					</dd>
+				</dl>
+			</div>
+			<div class="columnright">
+				<dl>
+					<dt>
+						Küche Benutzung
+					</dt>
+					<dd>					
+						{kitchen_price_type}
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</fieldset>
+
+				<!-- ###FE_EDITOR_ACCESSORIES### -->
+	<fieldset class="checkboxFields">
+		<div class="columndark">
+			<div class="columnleft">			
+				<dl>
+					<dt ###ACCESSORIES_REQUIRED###>{accessories.label}</dt>
+					<dd class="checkboxes">
+						{accessories}
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</fieldset>
+				<!-- ###FE_EDITOR_ACCESSORIES### -->						
+	
+	<fieldset>
+		<div class="columnlight">
+			<div class="columnright">
+				<dl>
+					<dt>{number_of_persons.label.tag}</dt>
+					<dd>{number_of_persons}</dd>
+				</dl>
+			</div>
+		</div>
+	</fieldset>
+			
 	<!-- ###FE_EDITOR_REGISTRATION_INFORMATION### -->
 	<!-- ###FE_EDITOR_PLACE_INFORMATION### -->
 	<fieldset class="checkboxFields">
@@ -330,6 +397,21 @@
 			<!-- ###FE_EDITOR_LODGING_AND_FOOD### -->
 		</div>
 	</fieldset>
+	<fieldset>
+		<div class="column-light">
+			<!-- ###FE_EDITOR_ADDITIONAL_INFORMATION### -->
+			<dl>
+				<dt###ADDITIONAL_INFORMATION_REQUIRED###>
+					{additional_information.label.tag}
+				</dt>
+			</dl>
+			<dl>
+				<dd class="additional_information">{additional_information}</dd>
+			</dl>
+			<!-- ###FE_EDITOR_ADDITIONAL_INFORMATION### -->
+		</div>
+	</fieldset>
+
 	<!-- ###FE_EDITOR_PLACE_INFORMATION### -->
 	<fieldset id="speakerCheckboxFields" class="checkboxFields">
 		<div class="columnlight">
@@ -446,7 +528,9 @@
 	<div class="columnlight">
 		<dl id="submit">
 			<dt>&nbsp;</dt>
-			<dd>
+			<dd>		
+				{calculated_price}		
+				{btncalculate} 
 		<!-- ###SUBMIT_AND_STAY### -->
 				{submit_and_stay}
 		<!-- ###SUBMIT_AND_STAY### -->
@@ -455,6 +539,9 @@
 			</dd>
 		</dl>
 	</div>
+	<p class="tx-seminars-pi1">
+		{bottom_text}
+	</p>
 </div>
 <!-- ###seminars_FORM### -->
 </body>

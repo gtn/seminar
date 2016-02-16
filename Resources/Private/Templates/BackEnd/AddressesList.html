@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Template for the back-end registrations list</title>
+</head>
+<body>
+<!-- ###SEMINARS_ADDRESSES_LIST### -->
+	<div style="clear: both;"></div>
+	###COMPLETE_TABLE###
+<!-- ###SEMINARS_ADDRESSES_LIST### -->
+</body>
+</html>
+
+<!-- ###ADDRESSES_TABLE### -->
+	<h3>###LABEL_ADDRESSES### (###NUMBER_OF_ADDRESSES###)</h3>
+	<form name="filtres" method="post" action="###FORM_ACTION###">
+	Filter: Name:<input type="text" name="filters[name]" value="###VALUE_NAME###">&nbsp;&nbsp;Email:<input type="text" name="filters[email]" value="###VALUE_EMAIL###">
+	<input type="submit" value="Search">
+	</form>
+	<table cellpadding="0" cellspacing="0" class="typo3-dblist">
+		<thead>
+			###TABLE_HEADER###
+		</thead>
+		<tbody>
+			###TABLE_ROWS###
+		</tbody>
+	</table>
+	###PAGE_BROWSER###
+<br><br>
+<!-- ###ADDRESSES_TABLE### -->
+
+<!-- ###ADDRESSES_TABLE_HEADING### -->
+	<tr class="t3-row-header">
+		<td>&nbsp;</td>
+		<td>###LABEL_USER_FULL_NAME###</td>
+		<td>###LABEL_USER_EMAIL###</td>
+		<td>###LABEL_COUNT_ATTENDANCES###</td>
+		<td>###LABEL_COUNT_BOOKING###</td>
+		<td>###LABEL_COUNT_NEWS###</td>
+	</tr>
+<!-- ###ADDRESSES_TABLE_HEADING### -->
+
+<!-- ###ADDRESSES_TABLE_ROW### -->
+	<tr>
+		<td>
+
+		</td>
+		<td>
+			###USER_FULL_NAME###
+		</td>
+		<td>
+			###USER_EMAIL###
+		</td>
+		<td>
+			###COUNT_ATTENDANCES###
+		</td>
+		<td>
+			###COUNT_BOOKING###
+		</td>
+		<td>
+			###COUNT_NEWS###
+		</td>
+	</tr>
+<!-- ###ADDRESSES_TABLE_ROW### -->
+
+<!-- ###ADDRESS_INFO### -->
+Information zum Benutzer:<br>
+<h3>###USER_NAME###  (###USER_EMAIL###)</h3>
+
+<br>Teilnahme an diesen Veranstaltungen:
+###USERS_ATTENDANCES###
+<br>Manger von diesen Veranstaltungen:
+###USERS_MANAGER###
+<br>Newsletter in denen die Person eingeschrieben ist:      
+###USERS_NEWS###
+<!-- ###ADDRESS_INFO### -->
+
+<!-- ###USERS_EVENTS_TABLE### -->
+	<table cellpadding="0" cellspacing="0" class="typo3-dblist">
+		<thead>
+			###USERS_EVENTS_TABLE_HEADER###
+		</thead>
+		<tbody>
+			###USERS_EVENTS_TABLE_ROWS###
+		</tbody>
+	</table>
+<!-- ###USERS_EVENTS_TABLE### -->
+
+<!-- ###USERS_EVENTS_TABLE_HEADING### -->
+	<tr class="t3-row-header">
+				<td>###LABEL_TITLE###</td>
+				<td>###LABEL_DATE###</td>
+				<td width=30>###LABEL_EDIT###</td>
+				<td width=30>###LABEL_INVOICE###</td>
+<!--				<td>&nbsp;</td>
+				<td>###LABEL_ATTENDEES###</td>
+				<td>###LABEL_NUMBER_OF_ATTENDEES_ON_QUEUE###</td>
+				<td>###LABEL_MINIMUM_NUMBER_OF_ATTENDEES###</td>
+				<td>###LABEL_MAXIMUM_NUMBER_OF_ATTENDEES###</td>
+				<td>###LABEL_HAS_ENOUGH_ATTENDEES###</td>
+				<td>###LABEL_IS_FULLY_BOOKED###</td>
+				<td>###LABEL_STATUS###</td>
+				<td>&nbsp;</td> -->
+	</tr>
+<!-- ###USERS_EVENTS_TABLE_HEADING### -->
+
+<!-- ###USERS_EVENTS_TABLE_ROW### -->
+			<tr>
+				<td>
+					###TITLE###
+				</td>
+				<td>
+					###DATE###
+				</td>
+				<td>
+					###LINK_EDIT###
+				</td>
+				<td>
+					###INVOICE_BUTTON###
+				</td>
+			</tr>
+<!-- ###USERS_EVENTS_TABLE_ROW### -->
+
+<!-- ###USERS_NEWS_TABLE### -->
+	<table cellpadding="0" cellspacing="0" class="typo3-dblist">
+		<thead>
+			###USERS_NEWS_TABLE_HEADER###
+		</thead>
+		<tbody>
+			###USERS_NEWS_TABLE_ROWS###
+		</tbody>
+	</table>
+<!-- ###USERS_NEWS_TABLE### -->
+
+<!-- ###USERS_NEWS_TABLE_HEADING### -->
+	<tr class="t3-row-header">
+				<td>###LABEL_TITLE###</td>
+				<td>###LABEL_CATEGORY###</td>
+				<td>###LABEL_CHANGE_CATEGORY###</td>
+				<td>&nbsp;</td>
+	</tr>
+<!-- ###USERS_NEWS_TABLE_HEADING### -->
+
+<!-- ###USERS_NEWS_TABLE_ROW### -->
+			<tr>
+				<td>###TITLE###</td>
+				<td>###CATEGORY###</td>
+				<td>###CHANGE_CATEGORY_FORM###</td>
+				<td>###LINK_DELETE###</td>
+			</tr>
+<!-- ###USERS_NEWS_TABLE_ROW### -->

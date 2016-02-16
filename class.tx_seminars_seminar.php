@@ -262,7 +262,11 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	 * @return string our topic title (or '' if there is an error)
 	 */
 	public function getTitle() {
-		return $this->getTopicString('title');
+		// get English title
+		if (t3lib_div::_GP('L')==1)		
+			return $this->getTopicString('title_en');
+		else
+			return $this->getTopicString('title');
 	}
 
 	/**
@@ -282,7 +286,11 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	 * @return string our seminar subtitle (or '' if there is an error)
 	 */
 	public function getSubtitle() {
-		return $this->getTopicString('subtitle');
+		// get English subtitle
+		if (t3lib_div::_GP('L')==1)		
+			return $this->getTopicString('subtitle_en');
+		else
+			return $this->getTopicString('subtitle');
 	}
 
 	/**
@@ -300,7 +308,11 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	 * @return string our seminar description (or '' if there is an error)
 	 */
 	public function getDescription() {
-		return $this->getTopicString('description');
+		// get English description
+		if (t3lib_div::_GP('L')==1)		
+			return $this->getTopicString('description_en');
+		else
+			return $this->getTopicString('description');
 	}
 
 	/**
@@ -332,7 +344,7 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	public function getAdditionalInformation() {
 		return $this->getTopicString('additional_information');
 	}
-
+	
 	/**
 	 * Sets our additional information.
 	 *
@@ -366,8 +378,8 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	 *
 	 * @return string the unique seminar title (or '' if there is an error)
 	 */
-	public function getTitleAndDate($dash = '–') {
-		$date = $this->hasDate() ? ', '.$this->getDate($dash) : '';
+	public function getTitleAndDate($dash = '–', $am = '') {
+		$date = $this->hasDate() ? ', '.$am.$this->getDate($dash) : '';
 
 		return $this->getTitle().$date;
 	}
@@ -2366,6 +2378,15 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 		return ($this->hasSeparateDetailsPage())
 			? array(
 				'parameter' => $this->getDetailsPage()
+/* patch for automatic detailsPageID generation in listview
+*/				,
+				'additionalParams' => t3lib_div::implodeArrayForUrl(
+					'tx_seminars_pi1',
+					array('showUid' => $this->getUid()),
+					'',
+					FALSE,
+					TRUE
+				) /* ---- */
 			)
 			: array(
 				'parameter' => $plugin->getConfValueInteger('detailPID'),
@@ -2722,6 +2743,12 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 		$message = '';
 		$registrationManager = tx_seminars_registrationmanager::getInstance();
 
+/* gtn start: registrations without fe-login */
+		if (!$this->needsRegistration() && !$this->isCanceled()) {
+			return $this->registrationNonFEloginFrom($this->getUid());		
+		};
+/* gtn end */			
+		
 		if (!$this->needsRegistration()) {
 			$message = $this->translate('message_noRegistrationNecessary');
 		} elseif ($this->isCanceled()) {
@@ -2743,6 +2770,77 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 
 		return $message;
 	}
+	
+/* gtn start: Form for registration without fe-login */
+	public function registrationNonFEloginFrom($eventid) {
+		$content = '<a name="form1"></a>';
+		$errormessage = '';
+		$showform = true;
+		if (isset($this->piVars['iwantregistersubmit'])) {
+			$email = $this->piVars['email'];
+			$name = $this->piVars['name'];
+			$comments = $this->piVars['comments'];
+			// checking fields
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $name=='') {
+				$showform = true;
+				if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+					$errormessage = '<p class="tx-seminars-pi1-error" style="display: block; color:red;">'.$this->translate('message_emptyEmail').'</p>';
+				if ($name=='')
+					$errormessage = '<p class="tx-seminars-pi1-error" style="display: block; color:red;">'.$this->translate('message_emptyName').'</p>';
+			} else { // fields are OK
+				// mail to admin
+				$eMailNotification = tx_oelib_ObjectFactory::make('tx_oelib_Mail');
+				$adminemail = $GLOBALS['TSFE']->tmpl->setup['plugin.']['feadmin.']['dmailsubscription.']['email.']['from'];
+				$adminename = $GLOBALS['TSFE']->tmpl->setup['plugin.']['feadmin.']['dmailsubscription.']['email.']['fromName'];
+				// $adminemail = 'szavarzin@gtn-solutions.com';
+				$admin = new tx_oelib_tests_fixtures_TestingMailRole($adminename, $adminemail);
+				$eMailNotification->addRecipient($admin);
+				$eMailNotification->setSender($admin);
+				$eMailNotification->setSubject($this->translate('email_notificationSubject').': '.$this->getTitleAndDate('-', 'am '));
+				//$text .= ' '.$this->getTitleAndDate('-');
+				$linkToEvent = t3lib_div::getHostname().'/'.$this->pi_getPageLink($GLOBALS['TSFE']->id, '', array('tx_seminars_pi1[showUid]' => $eventid));
+				$text_fromform .= $this->translate('label_name').': '.$name;
+				$text_fromform .= "\r\n";
+				$text_fromform .= $this->translate('label_email').': '.$email;
+				$text_fromform .= "\r\n";
+				$text_fromform .= $this->translate('comments').': '.$comments;
+				$adminmessage = sprintf($this->translate('email_registrationwithoutFElogin_Admin'), $this->getTitleAndDate('-', 'am '), $linkToEvent, $text_fromform);
+				$eMailNotification->setMessage($adminmessage);
+				tx_oelib_mailerFactory::getInstance()->getMailer()->send($eMailNotification);
+				// mail to user;
+				$eMailNotification = tx_oelib_ObjectFactory::make('tx_oelib_Mail');
+				$reciever = new tx_oelib_tests_fixtures_TestingMailRole('', $email);
+				$eMailNotification->addRecipient($reciever);
+				$eMailNotification->setSender($admin);
+				$eMailNotification->setSubject($this->translate('email_notificationSubject').': '.$this->getTitleAndDate('-', 'am '));
+				$eventtitle = $this->getTitleAndDate('-', 'am ');
+				$text = sprintf($this->translate('email_registrationwithoutFElogin_User'), $eventtitle, $linkToEvent, $text_fromform);		
+				
+				$eMailNotification->setMessage($text);
+				tx_oelib_mailerFactory::getInstance()->getMailer()->send($eMailNotification);
+				$showform = false;
+				// redirect			
+				// $pageId = $this->getConfValueInteger('thankYouAfterRegistrationPID', 's_registration');				
+				$content .= '<p style="color: blue;">'.sprintf($this->translate('email_confirmationHello_formal2'), $eventtitle).'</p>';
+				// $linkConfiguration = array('parameter' => $pageId);
+				// $result = preg_replace(array('/\[/', '/\]/'), array('%5B', '%5D'), $this->cObj->typoLink_URL($linkConfiguration));
+				// return t3lib_div::locationHeaderUrl($result);
+			};
+			
+		};
+		if ($showform) {
+			$action = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', array('tx_seminars_pi1[showUid]' => $eventid));
+			$content .= '<div class="tx-seminars-pi1" style="width: 75%;"><form action="'.$action.'#form1" method="post" id="tx_seminars_pi1_seminars"><div class="tx-seminars-pi1-event-editor">'.$errormessage.'<fieldset>';
+			$content .= '<div class="columnlight"><div class="columnleft"><dl><dt><label for="wanttoregister">'.$this->translate('register_now').'</label></dt><dd><input id="wanttoregister" type="checkbox" name="wanttoregister" style="width:20px;"></dd></div></div>';
+			$content .= '<div class="columnlight"><div class="columnleft"><dl><dt><label for="name">'.$this->translate('label_name').' *</label></dt><dd><input type="text" name="tx_seminars_seminar[name]" id="name"></dd></div></div>';
+			$content .= '<div class="columnlight"><div class="columnleft"><dl><dt><label for="wantemail">'.$this->translate('label_email').' *</label></dt><dd><input type="text" name="tx_seminars_seminar[email]" id="wantemail"></dd></div></div>';
+			$content .= '<div class="columnlight"><div class="columnleft"><dl><dt><label for="comments">'.$this->translate('comments').'</label></dt><dd><textarea style="width: 100%;" name="tx_seminars_seminar[comments]"></textarea></dd></div></div>';
+			$content .= '<div class="columnlight"><div class="columnleft"><input type="submit" value="'.$this->translate('register_now_submit').'" name="tx_seminars_seminar[iwantregistersubmit]"></div></div>';
+			$content .= '</div></form></div>';
+		};
+		return $content;
+	}
+/* gtn end */
 
 	/**
 	 * Checks whether this event has been canceled.
@@ -3363,7 +3461,11 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	 * @return string this event's teaser text (or '' if there is an error)
 	 */
 	public function getTeaser() {
-		return $this->getTopicString('teaser');
+		// get English teaser
+		if (t3lib_div::_GP('L')==1)		
+			return $this->getTopicString('teaser_en');
+		else
+			return $this->getTopicString('teaser');
 	}
 
 	/**
@@ -4590,6 +4692,16 @@ class tx_seminars_seminar extends tx_seminars_timespan {
 	public function isPublished() {
 		return !$this->hasRecordPropertyString('publication_hash');
 	}
+	
+// gtn
+	public function isBackgroundKnowledgeShow() {
+		return !$this->hasRecordPropertyInteger('hide_registration_fieldset1');
+	}
+	public function isNotesShow() {
+		return !$this->hasRecordPropertyInteger('hide_registration_fieldnotes');
+	}
+// gtn
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/class.tx_seminars_seminar.php']) {

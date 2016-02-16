@@ -34,6 +34,9 @@ t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_seminars_foods=1
 ');
 t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_seminars_accessories=1
+');
+t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_seminars_target_groups=1
 ');
 t3lib_extMgm::addUserTSConfig('
@@ -61,4 +64,11 @@ t3lib_extMgm::addTypoScript($_EXTKEY, 'setup','
 $TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys']['seminars'] = array(
 	'EXT:seminars/cli/tx_seminars_cli.php', '_CLI_seminars',
 );
+
+if(TYPO3_MODE == 'FE'){
+    $TYPO3_CONF_VARS['FE']['eID_include']['seminars_invoice'] = 'EXT:seminars/pdf/invoices.php';
+}  
+if(TYPO3_MODE == 'FE'){
+    $TYPO3_CONF_VARS['FE']['eID_include']['seminars_invoice_manager'] = 'EXT:seminars/pdf/invoice_manager.php';
+}  
 ?>

@@ -1072,9 +1072,13 @@
 										<numIndex index="0">LLL:EXT:seminars/locallang_db.xml:tx_seminars_seminars.notes</numIndex>
 										<numIndex index="1">notes</numIndex>
 									</numIndex>
+									<numIndex index="40" type="array">
+										<numIndex index="0">LLL:EXT:seminars/locallang_db.xml:tx_seminars_seminars.accessories</numIndex>
+										<numIndex index="1">accessories</numIndex>
+									</numIndex>
 								</items>
-								<size>40</size>
-								<maxitems>40</maxitems>
+								<size>41</size>
+								<maxitems>41</maxitems>
 								<renderMode>checkbox</renderMode>
 							</config>
 						</TCEforms>
@@ -1246,9 +1250,13 @@
 										<numIndex index="0">LLL:EXT:seminars/locallang_db.xml:tx_seminars_seminars.notes</numIndex>
 										<numIndex index="1">notes</numIndex>
 									</numIndex>
+									<numIndex index="40" type="array">
+										<numIndex index="0">LLL:EXT:seminars/locallang_db.xml:tx_seminars_seminars.accessories</numIndex>
+										<numIndex index="1">accessories</numIndex>
+									</numIndex>
 								</items>
-								<size>40</size>
-								<maxitems>40</maxitems>
+								<size>41</size>
+								<maxitems>41</maxitems>
 								<renderMode>checkbox</renderMode>
 							</config>
 						</TCEforms>

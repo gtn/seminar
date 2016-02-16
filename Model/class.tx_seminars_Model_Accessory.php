@@ -23,42 +23,24 @@
 ***************************************************************/
 
 /**
- * Class 'tx_seminars_Model_Food' for the 'seminars' extension.
+ * Class 'tx_seminars_Model_Accessory' for the 'seminars' extension.
  *
- * This class represents a food.
+ * This class represents a accessory.
  *
  * @package TYPO3
  * @subpackage tx_seminars
  *
  * @author Niels Pardon <mail@niels-pardon.de>
  */
-class tx_seminars_Model_Food extends tx_oelib_Model {
+class tx_seminars_Model_Accessory extends tx_oelib_Model {
 	/**
 	 * Returns our title.
 	 *
 	 * @return string our title, will not be empty
 	 */
-	public function getTitle() {		
-//			$measure = $GLOBALS['TSFE']->sL('LLL:EXT:seminars/locallang_db.xml:tx_seminars_foods.measure.I.'.$this->getAsString('measure'));
-		$seminarObj = t3lib_div::makeInstance('tx_seminars_seminar');
-		if ($this->getAsString('measure')<>'')		
-			$measure = $seminarObj->translate('measure.I.'.$this->getAsString('measure'));
-		else $measure = '';			
-//		var_dump($seminarObj);
-//print_r($measure);
-		if (t3lib_div::_GP('L')==1)	
-			$title = $this->getAsString('title_en');
-		else
-			$title = $this->getAsString('title');
-		return $title." ".number_format($this->getAsString('tx_gtnseminarsext_price'),1)."€ (".$measure.') ';
+	public function getTitle() {
+		return $this->getAsString('title')." (".number_format($this->getAsString('tx_gtnseminarsext_price'),1)."€)";
 	}
-
-	public function getInput() {
-//		$measure = $GLOBALS['TSFE']->sL('LLL:EXT:seminars/locallang.xml:label_title');
-		$input = "<input type='text' name='measure".$this->getUid()."'>";
-		return $input;
-	}
-
 
 	/**
 	 * Sets our title.
@@ -74,7 +56,7 @@ class tx_seminars_Model_Food extends tx_oelib_Model {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/Model/class.tx_seminars_Model_Food.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/Model/class.tx_seminars_Model_Food.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/Model/class.tx_seminars_Model_Accessory.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/seminars/Model/class.tx_seminars_Model_Accessory.php']);
 }
 ?>
