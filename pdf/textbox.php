@@ -12,21 +12,21 @@ class PDF_TextBox extends FPDF
  *
  * This function is provided by TUFaT.com
  */
-function drawTextBox($strText, $w, $h, $align='L', $valign='T', $border=true)
+function drawTextBox($strText, $w, $h, $align='L', $valign='T', $border=true, $lineHeight = 0)
 {
 	$xi=$this->GetX();
 	$yi=$this->GetY();
 	
-	$hrow=$this->FontSize;
+	$hrow=$this->FontSize + $lineHeight;
 	$textrows=$this->drawRows($w,$hrow,$strText,0,$align,0,0,0);
-	$maxrows=floor($h/$this->FontSize);
+	$maxrows=floor($h/$hrow);
 	$rows=min($textrows,$maxrows);
 
 	$dy=0;
 	if (strtoupper($valign)=='M')
-		$dy=($h-$rows*$this->FontSize)/2;
+		$dy=($h-$rows*$hrow)/2;
 	if (strtoupper($valign)=='B')
-		$dy=$h-$rows*$this->FontSize;
+		$dy=$h-$rows*$hrow;
 
 	$this->SetY($yi+$dy);
 	$this->SetX($xi);
